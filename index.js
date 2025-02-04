@@ -23,31 +23,31 @@ app.post(
   "/click",
   tryCatch(async (req, res) => {
     const { userId } = req.body;
- 
 
     let user = "";
 
-    // user alredy exists
+    // Check if user already exists
     if (userId) {
-    
-      user = (await User.findById(userId))
+      user = await User.findById(userId);
     }
 
-    // new user
-    if (!user ) {
+    // Create a new user if none exists
+    if (!user) {
       user = await User.create({
         counter: 0,
         points: 0,
-        prizes: 0,
+        prizes: 0, // Initialize prizes as well
       });
     }
-   
-    // increase the counter and on the basis of probability get rewards and upate the points accordingly
 
+    // Increase the counter and calculate rewards and points
     user.counter = user.counter + 1;
     const { reward, points } = calculateRewards();
 
-    if (reward) updatuser.prizes = user.prizesedPrizes + 1;
+    if (reward) {
+      // Fix the typo and correctly update prizes
+      user.prizes = user.prizes + 1;
+    }
 
     user.points = user.points + points;
 
@@ -56,6 +56,7 @@ app.post(
     return res.status(200).json({ success: true, data: savedUser });
   })
 );
+
 
 app.get(
   "/user/:id",
